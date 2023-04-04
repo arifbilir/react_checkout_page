@@ -1,34 +1,46 @@
-
+import { useState } from "react";
+import data from "./helper/data";
+import Header from "./components/Header";
 import Main from "./pages/Main";
-import NewProduct from "./pages/NewProduct";
-import ProductList from "./pages/ProductList";
-import About from "./pages/About";
-import UpdateProduct from "./pages/UpdateProduct";
-import Navbar from "./components/Navbar";
-import { BrowserRouter, Routes, Route } from "react-router-dom"; 
 
 function App() {
+  const [products, setProducts] = useState(data);
 
+  const handlePlus = (id) => {
+    const newProducts = products.map((item) => {
+      return item.id === id ? { ...item, amount: Number(item.amount) + 1 } : item;
+    });
+    setProducts(newProducts);
+  };
 
+  const handleMinus = (id) => {
+    const newProducts = products.map((item, i) => {
+      if (item.id === id) {
+        if (item.amount - 1 !== 0) return { ...item, amount: item.amount - 1 };
+      }
+      return item;
+    });
+    // .filter(item => item.amount !=0);
+
+    setProducts(newProducts);
+  };
+  const handleRemove = (id) => {
+    console.log(id);
+    const newProducts = products.filter((item) => item.id !== id);
+    setProducts(newProducts);
+  };
 
   return (
-    <div className="bg-light app">
-      {/* <Navbar/>
-      <Main/>
-      <About/>
-      <NewProduct/>
-      <ProductList/> */}
-      <BrowserRouter> 
-        <Navbar/>
-        <Routes>
-          <Route path="/" element={<Main />} />
-          <Route path="/new.product" element={<NewProduct/>} />
-          <Route path="/product-list" element={<ProductList />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/update-product" element={<UpdateProduct />} />
-          
-        </Routes>
-      </BrowserRouter>
+    <div className="bg-light">
+      <Header />
+
+      <Main
+        products={products}
+        setProducts={setProducts}
+        handleMinus={handleMinus}
+        handlePlus={handlePlus}
+        handleRemove={handleRemove}
+      />
     </div>
   );
 }

@@ -38,7 +38,13 @@ const ProductList = () => {
         <>
           <article id="product-panel" className="col-md-5">
             {products.map(item=>{
-              return <ProductCard key={item.id} item={item}/>;
+              return (
+                <ProductCard
+                  key={item.id}
+                  item={item}
+                  getProducts={getProducts}
+                />
+              );
             }) }
           </article>
           <article className="col-md-5 m-3">
